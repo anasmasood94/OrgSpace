@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  organization: one
+  role: one
+  status: 1
+  joined_at: 2025-07-09 16:12:20
+
+two:
+  user: two
+  organization: two
+  role: two
+  status: 1
+  joined_at: 2025-07-09 16:12:20

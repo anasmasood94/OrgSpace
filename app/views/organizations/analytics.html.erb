@@ -1,0 +1,121 @@
+<div class="row">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h5>Total Members</h5>
+        <p class="display-6"><%= @analytics.member_count %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h5>Total Minors</h5>
+        <p class="display-6"><%= @analytics.minors_count %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h5>Posts in Last Week</h5>
+        <p class="display-6"><%= @analytics.posts_count_last_week %></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5>Admins</h5>
+        <ul>
+          <% @analytics.admin_users.each do |admin| %>
+            <li><%= admin.email %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5>Most Viewed Posts</h5>
+        <ul>
+          <% @analytics.most_viewed_posts.each do |post| %>
+            <li>
+              <%= link_to post.title, organization_post_path(@organization, post) %>
+              (<%= post.views_count || 0 %> views)
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5>Top Post Creators</h5>
+        <ul>
+          <% @analytics.top_post_creators.each do |user, count| %>
+            <li><%= user&.email || 'Unknown' %> - <%= count %> posts</li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5>Posts by Category</h5>
+        <ul>
+          <% @analytics.posts_count_by_category.each do |category, count| %>
+            <li><%= category %>: <%= count %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5>Role Distribution</h5>
+        <ul>
+          <% @analytics.role_distribution.each do |member_type, count| %>
+            <li><%= member_type.humanize %>: <%= count %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5>Age Distribution</h5>
+        <ul>
+          <% @analytics.age_distribution.each do |age_group, count| %>
+            <li><%= age_group.humanize %>: <%= count %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <h3>Recent Joiners</h3>
+  <ul class="list-group">
+    <% @analytics.recent_joiners.each do |membership| %>
+      <li class="list-group-item">
+        <%= membership.user.email %> - <%= membership.joined_at.strftime("%B %d, %Y") %>
+      </li>
+    <% end %>
+  </ul>
+</div> 

@@ -1,0 +1,116 @@
+<% if membership.errors[:base].any? %>
+  <div class="alert alert-danger">
+    <% membership.errors[:base].each do |msg| %>
+      <div><%= msg %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if membership.persisted? %>
+  <div class="auth-container d-flex justify-content-center align-items-center pt-10">
+    <div class="auth-card">
+      <%= form_with(model: membership, url: organization_membership_path(@organization, membership), local: true) do |form| %>
+        <div class="form-group">
+          <%= form.label :email, "Email Address", class: "form-label" %>
+          <%= form.email_field :email, class: "form-control#{' is-invalid' if membership.errors[:email].any?}", required: true, value: membership.user.email %>
+          <% if membership.errors[:email].any? %>
+            <div class="invalid-feedback"><%= membership.errors[:email].first %></div>
+          <% end %>
+          <div class="form-text">Enter the email address for the new member.</div>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :date_of_birth, "Date of Birth", class: "form-label" %>
+          <%= form.date_field :date_of_birth, class: "form-control#{' is-invalid' if membership.errors[:date_of_birth].any?}", required: true, value: membership.user.date_of_birth %>
+          <% if membership.errors[:date_of_birth].any? %>
+            <div class="invalid-feedback"><%= membership.errors[:date_of_birth].first %></div>
+          <% end %>
+          <div class="form-text">Required for age verification and participation rules.</div>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :member_type, "Member Type", class: "form-label" %>
+          <%= form.select :member_type, OrganizationMembership.member_types.keys.map { |t| [t.humanize, t] }, {}, class: "form-select#{' is-invalid' if membership.errors[:member_type].any?}" %>
+          <% if membership.errors[:member_type].any? %>
+            <div class="invalid-feedback"><%= membership.errors[:member_type].first %></div>
+          <% end %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :status, class: "form-label" %>
+          <%= form.select :status, OrganizationMembership.statuses.keys.map { |s| [s.humanize, s] }, {}, class: "form-select#{' is-invalid' if membership.errors[:status].any?}" %>
+          <% if membership.errors[:status].any? %>
+            <div class="invalid-feedback"><%= membership.errors[:status].first %></div>
+          <% end %>
+        </div>
+
+        <div class="d-flex gap-2">
+          <%= form.submit "Save Member", class: "btn btn-primary btn-block" %>
+          <%= link_to "Cancel", organization_memberships_path(@organization), class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <div class="auth-container">
+    <div class="auth-card">
+      <%= form_with(model: membership, url: organization_memberships_path(@organization), local: true) do |form| %>
+        <div class="form-group">
+          <%= form.label :email, "Email Address", class: "form-label" %>
+          <%= form.email_field :email, class: "form-control#{' is-invalid' if membership.errors[:email].any?}", required: true %>
+          <% if membership.errors[:email].any? %>
+            <div class="invalid-feedback"><%= membership.errors[:email].first %></div>
+          <% end %>
+          <div class="form-text">Enter the email address for the new member.</div>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :date_of_birth, "Date of Birth", class: "form-label" %>
+          <%= form.date_field :date_of_birth, class: "form-control#{' is-invalid' if membership.errors[:date_of_birth].any?}", required: true %>
+          <% if membership.errors[:date_of_birth].any? %>
+            <div class="invalid-feedback"><%= membership.errors[:date_of_birth].first %></div>
+          <% end %>
+          <div class="form-text">Required for age verification and participation rules.</div>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :password, "Temporary Password", class: "form-label" %>
+          <%= form.password_field :password, class: "form-control#{' is-invalid' if membership.errors[:password].any?}", required: true %>
+          <% if membership.errors[:password].any? %>
+            <div class="invalid-feedback"><%= membership.errors[:password].first %></div>
+          <% end %>
+          <div class="form-text">The member will be prompted to change this on first login.</div>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :password_confirmation, "Confirm Password", class: "form-label" %>
+          <%= form.password_field :password_confirmation, class: "form-control#{' is-invalid' if membership.errors[:password_confirmation].any?}", required: true %>
+          <% if membership.errors[:password_confirmation].any? %>
+            <div class="invalid-feedback"><%= membership.errors[:password_confirmation].first %></div>
+          <% end %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :member_type, "Member Type", class: "form-label" %>
+          <%= form.select :member_type, OrganizationMembership.member_types.keys.map { |t| [t.humanize, t] }, {}, class: "form-select#{' is-invalid' if membership.errors[:member_type].any?}" %>
+          <% if membership.errors[:member_type].any? %>
+            <div class="invalid-feedback"><%= membership.errors[:member_type].first %></div>
+          <% end %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :status, class: "form-label" %>
+          <%= form.select :status, OrganizationMembership.statuses.keys.map { |s| [s.humanize, s] }, {}, class: "form-select#{' is-invalid' if membership.errors[:status].any?}" %>
+          <% if membership.errors[:status].any? %>
+            <div class="invalid-feedback"><%= membership.errors[:status].first %></div>
+          <% end %>
+        </div>
+
+        <div class="d-flex gap-2">
+          <%= form.submit "Add Member", class: "btn btn-primary btn-block" %>
+          <%= link_to "Cancel", organization_memberships_path(@organization), class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

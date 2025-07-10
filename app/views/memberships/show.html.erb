@@ -1,0 +1,15 @@
+<h1>Membership Details</h1>
+<p>
+  <strong>User:</strong> <%= @membership.user.email %><br>
+  <strong>Type:</strong>
+  <span class="badge bg-<%= @membership.admin? ? 'danger' : 'info' %>">
+    <%= @membership.member_type.humanize %>
+  </span>
+  <br>
+  <strong>Status:</strong>
+  <span class="badge bg-<%= @membership.active? ? 'success' : 'secondary' %>">
+    <%= @membership.status.humanize %>
+  </span>
+  <br>
+  <strong>Joined:</strong> <%= @membership.joined_at&.strftime('%B %d, %Y') || 'N/A' %>
+</p>
