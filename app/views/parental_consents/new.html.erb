@@ -1,0 +1,27 @@
+<div class="card">
+  <div class="card-header">
+    <h3>Parental Consent Required</h3>
+  </div>
+  <div class="card-body">
+    <p>Since you are under 18, we require parental consent for your participation.</p>
+
+    <% if @parental_consent.errors.any? %>
+      <div class="alert alert-danger">
+        <ul>
+          <% @parental_consent.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form_with(model: @parental_consent, url: parental_consent_path, local: true) do |form| %>
+      <div class="mb-3">
+        <%= form.label :parent_email, "Parent's Email Address", class: "form-label" %>
+        <%= form.email_field :parent_email, class: "form-control", required: true %>
+        <div class="form-text">We will send a consent request to this email address.</div>
+      </div>
+      <%= form.submit "Send Consent Request", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

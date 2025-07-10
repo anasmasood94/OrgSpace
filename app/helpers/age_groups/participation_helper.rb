@@ -1,0 +1,2 @@
+module AgeGroups::ParticipationHelper
+end

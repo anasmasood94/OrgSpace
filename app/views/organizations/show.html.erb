@@ -1,0 +1,111 @@
+<div class="row">
+  <div class="col-md-8">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Organization Details</h5>
+      </div>
+      <div class="card-body">
+        <p><strong>Description:</strong> <%= @organization.description %></p>
+      </div>
+    </div>
+
+    <% if current_user.admin_of?(@organization) %>
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5>Members</h5>
+          <%= link_to "Add Member", new_organization_membership_path(@organization), class: "btn btn-sm btn-primary" %>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Type</th>
+                  <th>Age Group</th>
+                  <th>Joined</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @members.each do |membership| %>
+                  <tr>
+                    <td><%= membership.user.email %></td>
+                    <td><span class="badge bg-<%= membership.admin? ? 'success' : 'info' %>"><%= membership.member_type.humanize %></span></td>
+                    <td><%= membership.user.age_group&.name || 'Not assigned' %></td>
+                    <td><%= membership.joined_at&.strftime("%B %d, %Y") || 'N/A' %></td>
+                    <td><span class="badge bg-<%= membership.active? ? 'success' : 'secondary' %>"><%= membership.status %></span></td>
+                    <td>
+                      <%= link_to "Edit", edit_organization_membership_path(@organization, membership), class: "btn btn-sm btn-outline-primary" %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <% membership_status = membership_status_for(current_user, @organization) %>
+
+    <!-- Posts Feed Section -->
+    <% if membership_status != :active %>
+      <div class="alert alert-danger">
+        Your membership is currently <%= membership_status %>. Ask your admin for approval to participate in organization activities.
+      </div>
+    <% else %>
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5>Posts Feed</h5>
+          <% if current_user.admin_of?(@organization) %>
+            <%= link_to "Create Post", new_organization_post_path(@organization), class: "btn btn-sm btn-success" %>
+          <% end %>
+        </div>
+        <div class="card-body">
+          <% if current_user.admin_of?(@organization) || current_user.adult? %>
+            <% posts = @organization.posts.order(created_at: :desc) %>
+          <% else %>
+            <% posts = @organization.posts.where("age_group_id = ? OR age_group_id IS NULL", current_user.age_group_id).order(created_at: :desc) %>
+          <% end %>
+          <% if posts.any? %>
+            <% posts.each do |post| %>
+              <div class="mb-4 p-3 border rounded bg-light">
+                <h6 class="mb-1"><%= post.title %></h6>
+                <div class="text-muted mb-2" style="font-size: 13px;">
+                  by <%= post.user.email %> &middot; <%= post.age_group&.name || 'All' %> &middot; <%= post.created_at.strftime('%b %d, %Y') %>
+                </div>
+                <div class="mb-2"><%= truncate(post.content, length: 180) %></div>
+                <%= link_to "Read More", organization_post_path(@organization, post), class: "btn btn-sm btn-outline-primary" %>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-muted">No posts yet for this organization.</p>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <!-- End Posts Feed Section -->
+
+  </div>
+
+  <% if current_user.admin_of?(@organization) %>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h5>Analytics</h5>
+        </div>
+        <div class="card-body">
+          <p><strong>Total Members:</strong> <%= @analytics.member_count %></p>
+          <p><strong>Age Distribution:</strong></p>
+          <ul>
+            <% @analytics.age_distribution.each do |age_group, count| %>
+              <li><%= age_group.humanize %>: <%= count %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

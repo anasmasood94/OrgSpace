@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+  <h1>Parental Consent Required</h1>
+
+  <p>Dear Parent/Guardian,</p>
+
+  <p>Your child, <%= @user.email %>, has requested to participate in our organization-based access control system.</p>
+
+  <p><strong>Child's Information:</strong></p>
+  <ul>
+    <li>Email: <%= @user.email %></li>
+    <li>Age: <%= @user.age %> years old</li>
+    <li>Date of Birth: <%= @user.date_of_birth.strftime("%B %d, %Y") %></li>
+  </ul>
+
+  <% if @organization %>
+    <p><strong>Organization:</strong> <%= @organization.name %></p>
+    <p><strong>Description:</strong> <%= @organization.description %></p>
+  <% end %>
+
+  <p><strong>What this means:</strong></p>
+  <ul>
+    <li>Your child will be able to join organization and participate in age-appropriate activities</li>
+    <li>All content will be filtered based on their age</li>
+    <li>You can revoke consent at any time</li>
+  </ul>
+
+  <p><strong>To approve consent:</strong></p>
+  <p>
+    <%= link_to "APPROVE CONSENT", approve_parental_consent_url(@parental_consent.id, token: @parental_consent.generate_approval_token),
+        style: "background-color: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;" %>
+  </p>
+
+  <p><strong>To deny consent:</strong></p>
+  <p>
+    <%= link_to "DENY CONSENT", deny_parental_consent_url(@parental_consent.id, token: @parental_consent.generate_denial_token),
+        style: "background-color: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;" %>
+  </p>
+  <p>If you have any questions, please contact us.</p>
+
+  <p>Thank you,<br>
+  OrgSpace Team</p>
+</body>
+</html>

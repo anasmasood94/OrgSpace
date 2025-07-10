@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+  <h1>Parental Consent Approved</h1>
+
+  <p>Hello <%= @user.email %>,</p>
+
+  <p>Great news! Your parental consent has been approved. You can now participate in our organization-based access control system.</p>
+
+  <p><strong>What you can do now:</strong></p>
+  <ul>
+    <li>Join organization</li>
+    <li>Participate in age-appropriate activities</li>
+    <li>Access content filtered for your age group</li>
+  </ul>
+
+  <p>Visit <%= link_to "our platform", root_url %> to get started!</p>
+
+  <p>Thank you,<br>
+  OrgSpace Team</p>
+</body>
+</html>

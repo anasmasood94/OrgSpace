@@ -1,0 +1,40 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><%= @post.title %></h4>
+            <% if current_user.admin_of?(@organization) %>
+              <div>
+                <%= link_to "Edit", edit_organization_post_path(@organization, @post), class: "btn btn-sm btn-light me-2" %>
+                <%= link_to "Delete", organization_post_path(@organization, @post), 
+                    method: :delete, 
+                    data: { confirm: 'Are you sure?' }, 
+                    class: "btn btn-sm btn-danger" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <div class="text-muted mb-2">
+              <small>
+                by <%= @post.user.email %> &middot; 
+                <%= @post.age_group&.name || 'All Ages' %> &middot; 
+                <%= @post.created_at.strftime('%B %d, %Y at %I:%M %p') %>
+              </small>
+            </div>
+          </div>
+          
+          <div class="post-content">
+            <%= simple_format(@post.content) %>
+          </div>
+        </div>
+        <div class="card-footer" style="text-align: right;">
+          <%= link_to "Back", organization_path(@organization), class: "btn btn-secondary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
